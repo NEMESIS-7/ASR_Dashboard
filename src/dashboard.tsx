@@ -344,7 +344,7 @@ const Dashboard: React.FC = () => {
                     <h3 className="font-medium text-gray-900">
                       {user.username}
                     </h3>
-                    <p className="text-sm text-gray-500 truncate" style={{ maxWidth: '160px' }}>
+                    <p className="text-sm text-gray-500 overflow-hidden whitespace-nowrap text-ellipsis max-w-[160px] md:overflow-visible md:whitespace-normal md:max-w-full">
                       {user.user_email}
                     </p>
                   </div>
