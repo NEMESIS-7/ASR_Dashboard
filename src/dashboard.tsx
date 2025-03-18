@@ -53,6 +53,9 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Goal constant
+  const MINUTES_GOAL = 6000;
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -95,7 +98,7 @@ const Dashboard: React.FC = () => {
         setRecordingsByText(recordingsByTextData.slice(0, 10)); // Top 10
         setAverageDuration(avgDuration);
         setDailyRecordings(dailyRecordingsData);
-        setUserStats(userStatsData.slice(0, 7)); // Top 5
+        setUserStats(userStatsData.slice(0, 7)); // Top 7
 
         setLoading(false);
       } catch (err) {
@@ -121,6 +124,12 @@ const Dashboard: React.FC = () => {
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
+  // Calculate progress percentage
+  const calculateProgress = (): number => {
+    if (!totalMinutes) return 0;
+    return (totalMinutes.minutes / MINUTES_GOAL) * 100;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -143,6 +152,8 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
+
+  const progressPercentage = calculateProgress();
 
   return (
     <div className="bg-gray-50 w-screen p-6">
@@ -172,19 +183,33 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="bg-white rounded-xl shadow-md p-6 border-t-4 border-purple-500">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-2">
             <div>
               <p className="text-gray-500 text-sm font-medium">Total Minutes</p>
               <h2 className="text-3xl font-bold text-gray-800">
                 {totalMinutes?.minutes}
               </h2>
               <p className="text-sm text-gray-500">
-                {totalMinutes?.seconds} seconds
+                of {MINUTES_GOAL} minute goal
               </p>
             </div>
             <div className="bg-purple-100 p-3 rounded-full">
               <Clock className="h-6 w-6 text-purple-600" />
             </div>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className="bg-purple-600 h-2.5 rounded-full"
+              style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between mt-1">
+            <span className="text-xs text-gray-500">
+              {progressPercentage.toFixed(1)}%
+            </span>
+            <span className="text-xs text-gray-500">
+              {totalMinutes?.seconds ? `${totalMinutes.seconds} seconds` : ""}
+            </span>
           </div>
         </div>
 
@@ -329,14 +354,15 @@ const Dashboard: React.FC = () => {
               >
                 <div className="flex items-center space-x-3">
                   <div
-                    className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold ${index === 0
-                      ? "bg-amber-500"
-                      : index === 1
+                    className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold ${
+                      index === 0
+                        ? "bg-amber-500"
+                        : index === 1
                         ? "bg-gray-400"
                         : index === 2
-                          ? "bg-amber-700"
-                          : "bg-blue-500"
-                      }`}
+                        ? "bg-amber-700"
+                        : "bg-blue-500"
+                    }`}
                   >
                     {index < 3 ? <Award className="h-5 w-5" /> : index + 1}
                   </div>
@@ -344,7 +370,10 @@ const Dashboard: React.FC = () => {
                     <h3 className="font-medium text-gray-900">
                       {user.username}
                     </h3>
-                    <p className="text-sm text-gray-500 truncate" style={{ maxWidth: '160px' }}>
+                    <p
+                      className="text-sm text-gray-500 truncate"
+                      style={{ maxWidth: "160px" }}
+                    >
                       {user.user_email}
                     </p>
                   </div>
@@ -389,6 +418,38 @@ const Dashboard: React.FC = () => {
               <Bar dataKey="recording_count" name="Recordings" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Minutes Goal Progress */}
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          Progress Toward 6,000 Minute Goal
+        </h2>
+        <div className="mb-2 flex justify-between">
+          <span className="text-sm font-medium text-gray-700">
+            {totalMinutes?.minutes || 0} minutes recorded
+          </span>
+          <span className="text-sm font-medium text-gray-700">
+            {MINUTES_GOAL} minutes goal
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-4">
+          <div
+            className="bg-purple-600 h-4 rounded-full relative"
+            style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+          >
+            {progressPercentage > 10 && (
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                {progressPercentage.toFixed(1)}%
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="mt-4 text-center">
+          <span className="text-sm font-medium text-gray-700">
+            {MINUTES_GOAL - (totalMinutes?.minutes || 0)} minutes remaining
+          </span>
         </div>
       </div>
     </div>
