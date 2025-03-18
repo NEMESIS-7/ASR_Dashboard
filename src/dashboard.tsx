@@ -95,7 +95,7 @@ const Dashboard: React.FC = () => {
         setRecordingsByText(recordingsByTextData.slice(0, 10)); // Top 10
         setAverageDuration(avgDuration);
         setDailyRecordings(dailyRecordingsData);
-        setUserStats(userStatsData.slice(0, 5)); // Top 5
+        setUserStats(userStatsData.slice(0, 7)); // Top 5
 
         setLoading(false);
       } catch (err) {
@@ -145,10 +145,10 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
-      <header className="mb-8">
+    <div className="bg-gray-50 w-screen p-6">
+      <header className="flex flex-col items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Akan ASR Dashboard</h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-center">
           Real-time analytics for Akan speech recognition
         </p>
       </header>
@@ -329,15 +329,14 @@ const Dashboard: React.FC = () => {
               >
                 <div className="flex items-center space-x-3">
                   <div
-                    className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold ${
-                      index === 0
-                        ? "bg-amber-500"
-                        : index === 1
+                    className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold ${index === 0
+                      ? "bg-amber-500"
+                      : index === 1
                         ? "bg-gray-400"
                         : index === 2
-                        ? "bg-amber-700"
-                        : "bg-blue-500"
-                    }`}
+                          ? "bg-amber-700"
+                          : "bg-blue-500"
+                      }`}
                   >
                     {index < 3 ? <Award className="h-5 w-5" /> : index + 1}
                   </div>
@@ -345,7 +344,9 @@ const Dashboard: React.FC = () => {
                     <h3 className="font-medium text-gray-900">
                       {user.username}
                     </h3>
-                    <p className="text-sm text-gray-500">{user.user_email}</p>
+                    <p className="text-sm text-gray-500 truncate" style={{ maxWidth: '160px' }}>
+                      {user.user_email}
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">
