@@ -421,7 +421,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Minutes Goal Progress */}
+      {/* Minutes Goal Progress
       <div className="bg-white rounded-xl shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">
           Progress Toward 6,000 Minute Goal
@@ -451,7 +451,7 @@ const Dashboard: React.FC = () => {
             {MINUTES_GOAL - (totalMinutes?.minutes || 0)} minutes remaining
           </span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
