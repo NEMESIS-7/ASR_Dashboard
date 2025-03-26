@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
           fetch(`${baseUrl}/recording-count-per-text?sort=desc`),
           fetch(`${baseUrl}/average-recording-duration`),
           fetch(`${baseUrl}/daily-recordings`),
-          fetch(`${baseUrl}/user-recordings-stats?sort=desc`),
+          fetch(`${baseUrl}/user-recordings-stats?sort=desc&sort_by=duration`),
         ]);
 
         // Process responses
@@ -380,10 +380,10 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-gray-900">
-                    {user.recording_count} recordings
+                    {formatTime(user.total_duration)}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {formatTime(user.total_duration)}
+                    {user.recording_count} recordings
                   </p>
                 </div>
               </div>
